@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="Search Through Archived Jeopardy Questions!">
+	<meta name="author" content="Sahir Mody">
+
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src={{ url_for('static', filename='script.js') }}></script>
+	<link rel="shortcut icon" type="image/x-icon" href={{ url_for('static', filename='favicon.ico') }}>
+	<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
+	<script>
+		$( function() {
+    		var potentialCategories = {{ categories|tojson }};
+    		$( "#category" ).autocomplete({
+				source: function(request, response) {
+        			var results = $.ui.autocomplete.filter(potentialCategories, request.term);
+					response(results.slice(0, 30));
+    			}
+   	 		});
+  		});
+	</script>
+</head>
+<body>
+
+	<p> What is ...</p>
+
+	<h1>The Jeopardy Archive Search!</h1>
+
+	<p>
+		Click here for the answer -> 
+	</p>
+
+	<h2>
+		Filters:
+	</h2>
+
+	<p>
+		Point Value (Difficulty):
+		<select id="values">
+			<option value=0>All</option>
+			<option value=100>100</option>
+			<option value=200>200</option>
+			<option value=300>300</option>
+			<option value=400>400</option>
+			<option value=500>500</option>
+			<option value=600>600</option>
+			<option value=700>700</option>
+			<option value=800>800</option>
+			<option value=900>900</option>
+			<option value=1000>1000</option>
+		</select>
+	</p>
+
+	<p>
+		Airdate By: <br>
+		All Time <input type="radio" name="airtime" value="all" checked="checked"> 
+		<input type="radio" name="airtime" value="year"> Year
+		<input type="radio" name="airtime" value="month"> Month
+		<input type="radio" name="airtime" value="week"> Week
+		<input type="radio" name="airtime" value="day"> Day
+		<span id="yearSelect">
+		Year: <select id="year">
+			{%for i in range(1964, 2019)%} 
+  				<option value={{ i }}>{{ i }}</li> 
+			{%endfor%}
+			<option value=2019 selected="selected">2019</li> 
+			</select>
+		</span>
+		<span id="monthSelect">
+		Month: <select id="month">
+				<option value=1 selected="selected">January</option>
+				<option value=2>February</option>
+				<option value=3>March</option>
+				<option value=4>April</option>
+				<option value=5>May</option>
+				<option value=6>June</option>
+				<option value=7>July</option>
+				<option value=8>August</option>
+				<option value=9>Septmber</option>
+				<option value=10>October</option>
+				<option value=11>November</option>
+				<option value=12>December</option>
+			</select>
+		</span>
+		<span id="dateSelect">
+		Date: <select id="date">
+			<option value=1 selected="selected">1</option>
+			{%for i in range(2,32)%} 
+  				<option value={{ i }}>{{ i }}</li> 
+			{%endfor%}
+			</select>
+		</span>
+	</p>
+
+	<p>
+		<div>
+			Category:
+			<input id="category" type="text" name="category" placeholder="Category">
+		</div>
+	</datalist>
+
+	</p>
+
+	<button type="button">SURPRISE ME!</button>
+	<br>
+
+	<table id="dataDisplay">
+	</table>
+
+</body>
+</html>
