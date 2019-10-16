@@ -1,42 +1,41 @@
+
+sessionStorage.setItem('offset', '0');
+
 $(document).ready(function(){
 
-  $("#yearSelect").hide();
-  $("#monthSelect").hide();
-  $("#dateSelect").hide();
+  $("#betweenFilterInfo").hide();
+  $("#count").hide();
+  $("#previousPage").hide();
+  $("#nextPage").hide();
 
-  $("input[type=radio][name='airtime']").change(function() {
+  $("input[type=checkbox][name='random']").change(function() {
 
-    $("#yearSelect").hide();
-    $("#monthSelect").hide();
-    $("#dateSelect").hide();
-
-    if(this.value == 'year' || 
-       this.value == 'month' || 
-       this.value == 'week' || 
-       this.value == 'day') {
-        $("#yearSelect").show();
+    if($("#random").is(':checked')) {
+      $("#count").show();
+      $("#filters").hide();
+    } else {
+      $("#count").hide();
+      $("#filters").show();
     }
-
-    if(this.value == 'month' || 
-       this.value == 'week' || 
-       this.value == 'day') {
-        $("#monthSelect").show();
-    }
-
-    if(this.value == 'week' || 
-       this.value == 'day') {
-        $("#dateSelect").show();
-
-    }
-
-    getData(false);
 
   });
 
-  $('#month').change(function() {
-    month = $('#month').val();
-    year = $( "#year" ).val();
-    $('#date option:gt(27)').remove();
+  $("input[type=radio][name='airtime']").change(function() {
+
+    $("#betweenFilterInfo").hide();
+
+    if(this.value == 'between'){
+
+      $("#betweenFilterInfo").show();
+        
+    }
+
+  });
+
+  $('#startMonthSelect').change(function() {
+    month = $('#startMonthSelect').val();
+    year = $( "#startYearSelect" ).val();
+    $('#startDateSelect option:gt(27)').remove();
     var daysToAdd = 0;
     if(month == 2) {
       if(year % 4  == 0) {
@@ -49,109 +48,187 @@ $(document).ready(function(){
       daysToAdd = 3;
     }
 
-    var i;
-    for (i = 1; i <= daysToAdd; i++) { 
-      $('#date').append('<option value='+(i+28).toString()+'>'+(i+28).toString()+'</option>');
+    for (var i = 1; i <= daysToAdd; i++) { 
+      $('#startDateSelect').append('<option value='+(i+28).toString()+'>'+(i+28).toString()+'</option>');
     }
-
-    getData(false);
     
   });
 
-  $('#year').change(function() {
-    year = $( '#year' ).val();
-    month = $('#month').val();
+  $('#endMonthSelect').change(function() {
+    month = $('#endMonthSelect').val();
+    year = $( "#endYearSelect" ).val();
+    $('#endDateSelect option:gt(27)').remove();
+    var daysToAdd = 0;
+    if(month == 2) {
+      if(year % 4  == 0) {
+        daysToAdd = 1;
+      }
+    } else if(month == 4 || month == 6 ||  
+              month == 9 || month == 11) {
+        daysToAdd = 2;
+    } else {
+      daysToAdd = 3;
+    }
+
+    for (var i = 1; i <= daysToAdd; i++) { 
+      $('#endDateSelect').append('<option value='+(i+28).toString()+'>'+(i+28).toString()+'</option>');
+    }
+    
+  });
+
+  $('#startYearSelect').change(function() {
+    year = $( '#startYearSelect' ).val();
+    month = $('#startMonthSelect').val();
 
     if(month == 2) {
-      $('#date option:gt(27)').remove();
-      if(year % 4 == 0) {
-        $('#date').append('<option value=29>29</option>');
+      $('#startDateSelect option:gt(27)').remove();
+      if( year % 4 == 0) {
+        $('#startDateSelect').append('<option value='+29+'>'+29+'</option>');
       }
-    }
-
-    getData(false);
+  }
     
   });
 
-  $('#date').change(function() {
+  $('#endYearSelect').change(function() {
+    year = $( '#endYearSelect' ).val();
+    month = $('#endMonthSelect').val();
 
-    getData(false);
+    if(month == 2) {
+        $('#endDateSelect option:gt(27)').remove();
+        if( year % 4 == 0) {
+          $('#endDateSelect').append('<option value='+29+'>'+29+'</option>');
+        }
+    }
     
   });
 
 
   $("button").click(function(){
 
-    getData(true);
+    $("#previousPage").hide();
+    $("#nextPage").hide();
+
+    if ($("#random").is(':checked')) {
+      sessionStorage.setItem('offset', '0');
+      getRandom(parseInt($( "#countSelect option:selected" ).val()));
+      return;
+
+    }
+
+    var args = getArgs();
+
+    offset = parseInt(sessionStorage.getItem('offset'));
+
+    if(this.id == "search") {
+      sessionStorage.setItem('offset', '0');
+      args.offset = 0;
+    } else if(this.id == "nextPage") {
+      offset += 100;
+      args.offset = offset;
+      sessionStorage.setItem('offset', offset);
+    } else {
+      offset -= 100;
+      args.offset = offset;
+      sessionStorage.setItem('offset', offset);
+    }
+
+
+    getData(args);
     
-  });
-
-  $("input[type=text]").change(function() {
-    getData(false);
-  });
-
-  $("#values").change(function() {
-    getData(false);
   });
 
 });
 
-//Loop through all table rows and fade them in
-var animateTable = function(rows) {
+var getArgs = function() {
 
-  var fadeTime = 700;
-  var delayTime = 50;
-  var i = 0;
+  var args = new Object();
 
-  $("#dataDisplay tr").each(function() {
-    setTimeout(function() {
-      $("#dataDisplay tr:eq(" + i++ + ") ").fadeTo(fadeTime, 1.0);
-    }, delayTime);
-  });
-};
+  args.value = parseInt($( "#values option:selected" ).val());
+    
+  args.category = $( "input[name=category]" ).val();
 
-var getData = function(random) {
+  args.searchType = $("input[name='airtime']:checked").val();
 
-  var value = random ? 0 : parseInt($( "#values option:selected" ).val());
-  var category = random ? null : $( "input[name=category]" ).val();
-  var year= random ? 0 : parseInt($( "#year option:selected" ).val());
-  var month = random ? 0 : parseInt($( "#month option:selected" ).val());
-  var date = random ? 0 : parseInt($( "#date option:selected" ).val());
-  var airdateSearch = random ? "all" : $("input[name='airtime']:checked").val();
+  if(args.searchType == 'between') {
+
+    args.startYear = parseInt($( "#startYearSelect option:selected" ).val());
+    args.startMonth = parseInt($( "#startMonthSelect option:selected" ).val());
+    args.startDate = parseInt($( "#startDateSelect option:selected" ).val());
+    args.endYear = parseInt($( "#endYearSelect option:selected" ).val());
+    args.endMonth = parseInt($( "#endMonthSelect option:selected" ).val());
+    args.endDate = parseInt($( "#endDateSelect option:selected" ).val());
+
+  }
+
+  return args;
+
+}
+
+var getData = function(args) {
 
   $.ajax({
-    url: "http://localhost:8888/api",
+    url: "http://localhost:8888/api-connector",
     type: 'GET',
-    data: { 
-      val: value,
-      cat: category,
-      yr: year,
-      mon: month,
-      day: date,
-      type: airdateSearch
-    },
+    data: args,
     success: function(result) {
-
-      $('#dataDisplay').empty();
-
-      $("#dataDisplay").append("<tr><th>Airdate</th><th>Category</th><th>Point Value</th><th>Clue</th><th>Answer</th></tr>");
-
-      var i = 0;
-      var missingDataCount = 0;
-      for(i = 0; i < result.length; i++) {
-        if (result[i].value == null || result[i].question.length == 0 || result[i].category.title == undefined) {
-          missingDataCount++;
-          continue;
+      if(result.length == 0) {
+        if(sessionStorage.get(offset) > 0) {
+          alert("NO MORE RESULTS TO SHOW!");
+        } else {
+          alert("NO RESULTS FOR THIS SEARCH!");
         }
-        var row = "<tr style='opacity:0'><td>"+result[i].airdate.substring(0,10)+"</td><td>"+result[i].category.title.toString()
-                  +"</td><td>"+result[i].value.toString()+"</td><td>"+result[i].question.toString()+"</td><td id='answer'>"
-                  +result[i].answer+"</td></tr>";
-        $('#dataDisplay').append('<tr>' + row + '</tr>');
+      } else {
+        displayTable(result);
+        if(parseInt(sessionStorage.getItem('offset')) > 0) {
+          $("#previousPage").show();      
+        }
+        $("#nextPage").show();
       }
-
-      animateTable(result.length - missingDataCount);
     }
   });
 
 }
 
+
+
+var getRandom = function(count) {
+
+  $.ajax(
+    {
+      url: "http://jservice.io/api/random",
+      type: 'GET',
+      data: {
+        count: count
+      },
+      success: function(result) {
+        displayTable(result);
+      }
+    });
+  
+}
+
+var displayTable = function(result) {
+
+  $('#dataDisplay').empty();
+  
+  $("#dataDisplay").append("<tr><th>Airdate</th><th>Category</th><th>Point Value</th><th>Clue</th><th>Answer</th></tr>");
+
+  for (var i = 0; i < result.length; i++) {
+
+    if (result[i].question.length == 0 || result[i].category.title == undefined) {
+      continue;
+    }
+
+    var questionValue = (result[i].value == null) ? "Final Jeopardy" : result[i].value.toString();
+
+    var row = "<tr><td>"+result[i].airdate.substring(0,10)+"</td><td>"+result[i].category.title.toString()
+              +"</td><td>"+questionValue+"</td><td>"+result[i].question.toString()+"</td><td>"
+              +result[i].answer+"</td></tr>";
+
+    $('#dataDisplay').append(row).hide();
+
+  }
+
+  $("#dataDisplay").fadeIn(1500);
+
+}

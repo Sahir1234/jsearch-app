@@ -103,5 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# annoying Mac files
 .DS_Store
 .Rhistory

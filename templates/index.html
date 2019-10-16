@@ -13,6 +13,7 @@
 	<script src={{ url_for('static', filename='script.js') }}></script>
 	<link rel="shortcut icon" type="image/x-icon" href={{ url_for('static', filename='favicon.ico') }}>
 	<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
+
 	<script>
 		$( function() {
     		var potentialCategories = {{ categories|tojson }};
@@ -24,21 +25,67 @@
    	 		});
   		});
 	</script>
+
 </head>
+
 <body>
 
-	<p> What is ...</p>
-
-	<h1>The Jeopardy Archive Search!</h1>
-
 	<p>
-		Click here for the answer -> 
+		What is ...
 	</p>
 
-	<h2>
-		Filters:
-	</h2>
+	<h1>The Jeopardy Search Application! </h1>
 
+	<div class ="filterBox">
+		<h2>
+			Filters:
+		</h2>
+		
+		<span id="instructionButton"
+			onclick="document.getElementById('instructions').style.display = 'block'">?
+		</span>
+
+		Random Questions? <input type="checkbox" name="random" value="random" id="random">
+		<br>
+		
+		<span id="count">
+			How Many? <select id="countSelect">
+				<option value=1 selected="selected">1</li> 
+					{%for i in range(2, 101)%} 
+					  <option value={{ i }}>{{ i }}</li> 
+					{%endfor%}
+				</select>
+		</span>
+
+	</div>
+	
+
+	<form id="instructions" class="modal" style="display: none">
+		<div class="modal-content">
+		
+			<h2>
+				What Is This App?
+			</h2>
+
+			<p>
+				This app is built around the jService API, which allows users to quickly query an archive of past Jeopardy questions.
+				You can use the filter bar to look for specific types of questions based on their value, airdate or category. You can even
+				get a random batch of 1 to 100 questions if you'd like. Please note taht since the API sometimes returns incomplete data for
+				certain questions
+			</p>
+
+			<img src={{ url_for('static', filename='trebek.gif') }} title="trebek" />
+
+			<p>
+				This app was built by Sahir Mody as part of the Capital One Software Engineering Summit Application process in 2019.
+			</p>
+		
+		</div>
+	</form>
+
+	
+
+	<span id="filters">
 	<p>
 		Point Value (Difficulty):
 		<select id="values">
@@ -49,30 +96,30 @@
 			<option value=400>400</option>
 			<option value=500>500</option>
 			<option value=600>600</option>
-			<option value=700>700</option>
 			<option value=800>800</option>
-			<option value=900>900</option>
 			<option value=1000>1000</option>
 		</select>
 	</p>
 
 	<p>
 		Airdate By: <br>
-		All Time <input type="radio" name="airtime" value="all" checked="checked"> 
-		<input type="radio" name="airtime" value="year"> Year
-		<input type="radio" name="airtime" value="month"> Month
-		<input type="radio" name="airtime" value="week"> Week
-		<input type="radio" name="airtime" value="day"> Day
-		<span id="yearSelect">
-		Year: <select id="year">
+		<label for="allFilter">All Time</label>
+		<input type="radio" name="airtime" id="allFilter" value="all" checked="checked">
+		<label for="betweenFilter">Between Two Dates</label>
+		<input type="radio" name="airtime" id="betweenFilter" value="between">
+
+		<span id = "betweenFilterInfo">
+		Starting Date:
+		<span id="startYear">
+		Year: <select id="startYearSelect">
 			{%for i in range(1964, 2019)%} 
   				<option value={{ i }}>{{ i }}</li> 
 			{%endfor%}
 			<option value=2019 selected="selected">2019</li> 
 			</select>
 		</span>
-		<span id="monthSelect">
-		Month: <select id="month">
+		<span id="startMonth">
+		Month: <select id="startMonthSelect">
 				<option value=1 selected="selected">January</option>
 				<option value=2>February</option>
 				<option value=3>March</option>
@@ -87,13 +134,48 @@
 				<option value=12>December</option>
 			</select>
 		</span>
-		<span id="dateSelect">
-		Date: <select id="date">
+		<span id="startDate">
+		Date: <select id="startDateSelect">
 			<option value=1 selected="selected">1</option>
 			{%for i in range(2,32)%} 
   				<option value={{ i }}>{{ i }}</li> 
 			{%endfor%}
 			</select>
+		</span>
+
+		Ending Date:
+		<span id="endYear">
+			Year: <select id="endYearSelect">
+				{%for i in range(1964, 2019)%} 
+					  <option value={{ i }}>{{ i }}</li> 
+				{%endfor%}
+				<option value=2019 selected="selected">2019</li> 
+				</select>
+			</span>
+			<span id="endMonth">
+			Month: <select id="endMonthSelect">
+					<option value=1 selected="selected">January</option>
+					<option value=2>February</option>
+					<option value=3>March</option>
+					<option value=4>April</option>
+					<option value=5>May</option>
+					<option value=6>June</option>
+					<option value=7>July</option>
+					<option value=8>August</option>
+					<option value=9>Septmber</option>
+					<option value=10>October</option>
+					<option value=11>November</option>
+					<option value=12>December</option>
+				</select>
+			</span>
+			<span id="endDate">
+			Date: <select id="endDateSelect">
+				<option value=1 selected="selected">1</option>
+				{%for i in range(2,32)%} 
+					  <option value={{ i }}>{{ i }}</li> 
+				{%endfor%}
+				</select>
+			</span>
 		</span>
 	</p>
 
@@ -102,15 +184,31 @@
 			Category:
 			<input id="category" type="text" name="category" placeholder="Category">
 		</div>
-	</datalist>
-
+	
 	</p>
 
-	<button type="button">SURPRISE ME!</button>
+	</span>
+
+	<button type="button" name="search" id="search">SEARCH!</button>
+	<br>
 	<br>
 
 	<table id="dataDisplay">
 	</table>
+	<br>
+
+	<button type="button" name="previousPage" id="previousPage">Previous Page</button>
+	<button type="button" name="nextPage" id="nextPage">Next Page</button>
+
+	<script>
+		// When the user clicks anywhere outside of the modal, close it
+		var instructions = document.getElementById("instructions");
+		window.onclick = function(event) {
+		if (event.target == instructions) {
+		  instructions.style.display = "none";
+		} 
+	  }
+	  </script>
 
 </body>
 </html>
