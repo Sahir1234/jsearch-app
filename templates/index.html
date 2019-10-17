@@ -34,30 +34,135 @@
 		What is ...
 	</p>
 
-	<h1>The Jeopardy Search Application! </h1>
+	<h1>The J-Search Web App! </h1>
 
-	<div class ="filterBox">
+	<form id="filterBox">
 		<h2>
 			Filters:
 		</h2>
 		
-		<span id="instructionButton"
-			onclick="document.getElementById('instructions').style.display = 'block'">?
+		<span id="instructionButton" onclick="document.getElementById('instructions').style.display = 'block'">
+			?
 		</span>
 
 		Random Questions? <input type="checkbox" name="random" value="random" id="random">
 		<br>
 		
 		<span id="count">
-			How Many? <select id="countSelect">
+			How Many? 
+			<select id="countSelect">
 				<option value=1 selected="selected">1</li> 
 					{%for i in range(2, 101)%} 
-					  <option value={{ i }}>{{ i }}</li> 
+						<option value={{ i }}>{{ i }}</li> 
 					{%endfor%}
-				</select>
+			</select>
 		</span>
 
-	</div>
+		<span id="filters">
+			<p>
+				Point Value (Difficulty):
+				<select id="values">
+					<option value=0>All</option>
+					<option value=100>100</option>
+					<option value=200>200</option>
+					<option value=300>300</option>
+					<option value=400>400</option>
+					<option value=500>500</option>
+					<option value=600>600</option>
+					<option value=800>800</option>
+					<option value=1000>1000</option>
+				</select>
+			</p>
+		
+			<p>
+				Airdate By: <br>
+				<label for="allFilter">All Time</label>
+				<input type="radio" name="airtime" id="allFilter" value="all" checked="checked">
+				<label for="betweenFilter">Between Two Dates</label>
+				<input type="radio" name="airtime" id="betweenFilter" value="between">
+		
+				<span id = "betweenFilterInfo">
+				Starting Date:
+				<span id="startYear">
+				Year: <select id="startYearSelect">
+					{%for i in range(1964, 2019)%} 
+						  <option value={{ i }}>{{ i }}</li> 
+					{%endfor%}
+					<option value=2019 selected="selected">2019</li> 
+					</select>
+				</span>
+				<span id="startMonth">
+				Month: <select id="startMonthSelect">
+						<option value=1 selected="selected">January</option>
+						<option value=2>February</option>
+						<option value=3>March</option>
+						<option value=4>April</option>
+						<option value=5>May</option>
+						<option value=6>June</option>
+						<option value=7>July</option>
+						<option value=8>August</option>
+						<option value=9>Septmber</option>
+						<option value=10>October</option>
+						<option value=11>November</option>
+						<option value=12>December</option>
+					</select>
+				</span>
+				<span id="startDate">
+				Date: <select id="startDateSelect">
+					<option value=1 selected="selected">1</option>
+					{%for i in range(2,32)%} 
+						  <option value={{ i }}>{{ i }}</li> 
+					{%endfor%}
+					</select>
+				</span>
+		
+				Ending Date:
+				<span id="endYear">
+					Year: <select id="endYearSelect">
+						{%for i in range(1964, 2019)%} 
+							  <option value={{ i }}>{{ i }}</li> 
+						{%endfor%}
+						<option value=2019 selected="selected">2019</li> 
+						</select>
+					</span>
+					<span id="endMonth">
+					Month: <select id="endMonthSelect">
+							<option value=1 selected="selected">January</option>
+							<option value=2>February</option>
+							<option value=3>March</option>
+							<option value=4>April</option>
+							<option value=5>May</option>
+							<option value=6>June</option>
+							<option value=7>July</option>
+							<option value=8>August</option>
+							<option value=9>Septmber</option>
+							<option value=10>October</option>
+							<option value=11>November</option>
+							<option value=12>December</option>
+						</select>
+					</span>
+					<span id="endDate">
+					Date: <select id="endDateSelect">
+						<option value=1 selected="selected">1</option>
+						{%for i in range(2,32)%} 
+							  <option value={{ i }}>{{ i }}</li> 
+						{%endfor%}
+						</select>
+					</span>
+				</span>
+			</p>
+		
+			<p>
+				<div>
+					Category:
+					<input id="category" type="text" name="category" placeholder="Category">
+				</div>
+			
+			</p>
+		
+			</span>
+
+	</form>
 	
 
 	<form id="instructions" class="modal" style="display: none">
@@ -70,8 +175,15 @@
 			<p>
 				This app is built around the jService API, which allows users to quickly query an archive of past Jeopardy questions.
 				You can use the filter bar to look for specific types of questions based on their value, airdate or category. You can even
-				get a random batch of 1 to 100 questions if you'd like. Please note taht since the API sometimes returns incomplete data for
-				certain questions
+				get a random batch of 1 to 100 questions if you'd like. Please note that since the API sometimes returns incomplete data for
+				certain questions, these questions will not be displayed in the table in order to only provide complete question data.
+			</p>
+
+			<p>
+				When you make a search, the results will be displayed in a table. In the table, the answer column is hidden so that you can
+				try to answer the question. To reveal the answer, simply hover your mouse over the column and the answer will appear.
+				You can also save a question you like to your favorites by clicking anywhere in that question's row. You can easily see your
+				saved questions by clicking the "SHOW FAVORITES!" button. Happy searching! Alex Trebek approves!
 			</p>
 
 			<img src={{ url_for('static', filename='trebek.gif') }} title="trebek" />
@@ -83,117 +195,12 @@
 		</div>
 	</form>
 
-	
-
-	<span id="filters">
-	<p>
-		Point Value (Difficulty):
-		<select id="values">
-			<option value=0>All</option>
-			<option value=100>100</option>
-			<option value=200>200</option>
-			<option value=300>300</option>
-			<option value=400>400</option>
-			<option value=500>500</option>
-			<option value=600>600</option>
-			<option value=800>800</option>
-			<option value=1000>1000</option>
-		</select>
-	</p>
-
-	<p>
-		Airdate By: <br>
-		<label for="allFilter">All Time</label>
-		<input type="radio" name="airtime" id="allFilter" value="all" checked="checked">
-		<label for="betweenFilter">Between Two Dates</label>
-		<input type="radio" name="airtime" id="betweenFilter" value="between">
-
-		<span id = "betweenFilterInfo">
-		Starting Date:
-		<span id="startYear">
-		Year: <select id="startYearSelect">
-			{%for i in range(1964, 2019)%} 
-  				<option value={{ i }}>{{ i }}</li> 
-			{%endfor%}
-			<option value=2019 selected="selected">2019</li> 
-			</select>
-		</span>
-		<span id="startMonth">
-		Month: <select id="startMonthSelect">
-				<option value=1 selected="selected">January</option>
-				<option value=2>February</option>
-				<option value=3>March</option>
-				<option value=4>April</option>
-				<option value=5>May</option>
-				<option value=6>June</option>
-				<option value=7>July</option>
-				<option value=8>August</option>
-				<option value=9>Septmber</option>
-				<option value=10>October</option>
-				<option value=11>November</option>
-				<option value=12>December</option>
-			</select>
-		</span>
-		<span id="startDate">
-		Date: <select id="startDateSelect">
-			<option value=1 selected="selected">1</option>
-			{%for i in range(2,32)%} 
-  				<option value={{ i }}>{{ i }}</li> 
-			{%endfor%}
-			</select>
-		</span>
-
-		Ending Date:
-		<span id="endYear">
-			Year: <select id="endYearSelect">
-				{%for i in range(1964, 2019)%} 
-					  <option value={{ i }}>{{ i }}</li> 
-				{%endfor%}
-				<option value=2019 selected="selected">2019</li> 
-				</select>
-			</span>
-			<span id="endMonth">
-			Month: <select id="endMonthSelect">
-					<option value=1 selected="selected">January</option>
-					<option value=2>February</option>
-					<option value=3>March</option>
-					<option value=4>April</option>
-					<option value=5>May</option>
-					<option value=6>June</option>
-					<option value=7>July</option>
-					<option value=8>August</option>
-					<option value=9>Septmber</option>
-					<option value=10>October</option>
-					<option value=11>November</option>
-					<option value=12>December</option>
-				</select>
-			</span>
-			<span id="endDate">
-			Date: <select id="endDateSelect">
-				<option value=1 selected="selected">1</option>
-				{%for i in range(2,32)%} 
-					  <option value={{ i }}>{{ i }}</li> 
-				{%endfor%}
-				</select>
-			</span>
-		</span>
-	</p>
-
-	<p>
-		<div>
-			Category:
-			<input id="category" type="text" name="category" placeholder="Category">
-		</div>
-	
-	</p>
-
-	</span>
-
 	<button type="button" name="search" id="search">SEARCH!</button>
+	<button type="button" name="favorites" id="favorites">SHOW FAVORITES!</button>
 	<br>
 	<br>
 
-	<table id="dataDisplay">
+	<table id="dataDisplay" style="cursor: pointer;">
 	</table>
 	<br>
 

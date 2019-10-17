@@ -26,25 +26,29 @@ p {
 h1 {
   font-size: 3.0em;
   font-family: Georgia, Times, Serif;
-  text-shadow: 2px 2px black;
+  color: white;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
   animation: fadeIn 1s forwards;
 }
 
-.filterBox {
-  max-width: 1000px;
-  border-color: black;
-  border-radius: 15px;
+#filterBox {
+  border-radius: 50px;
+  border: 10px solid black;
+  padding: 10px;
+  width: 600px;
+  height: 300px;
+  background-color: white;
+  margin-left: auto;
+  margin-right:auto;
 }
 
 #instructionButton {
-  color: white;
-  font-size: 3em;
+  color: black;
+  font-size: 1em;
   cursor: pointer;
-  border-radius: 15px;
-  padding: 15px;
-  display: inline-block;
+  display: block;
   border: 2px solid black;
-  border-radius: 50%;
+  border-radius: 10px;
   border-color: black;
 }
 
@@ -53,17 +57,20 @@ button {
   font-size: 1em;
   cursor: pointer;
   border-radius: 15px;
-  padding: 15px;
+  padding: 10px;
   margin-left: 25px;
   display: inline-block;
   border: 2px solid black;
-  border-radius: 5px;
   background: #f1f1f1;
-  border-color: black;
 }
 
 button:hover {
   opacity: 0.7;
+}
+
+#save {
+  width: 100%;
+  height: 100%;
 }
 
 input[type=text] {
@@ -87,11 +94,16 @@ select {
   color: #444;
   line-height: 1.3;
   padding: .6em 1.4em .5em .8em;
-  width: 100%;
-  max-width: 100%; 
+  width: 10%;
   box-sizing: border-box;
   margin: 0;
   border: 1px solid #aaa;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
 }
 
 th, tr, td {
@@ -100,23 +112,19 @@ th, tr, td {
   border: 0.5px solid white;
   margin-right: auto;
   margin-left: auto;
-  max-width: 1200px;
   padding: 15px;
   text-align: left;
   border-radius: 25px;
 }
 
-#dataDisplay tr > *:nth-child(5) {
+#dataDisplay tr:not(:first-child) > *:nth-child(5) {
   opacity : 0.0;
 }
 
-#dataDisplay tr > *:nth-child(5):hover {
+#dataDisplay tr:not(:first-child) > *:nth-child(5):hover{
   opacity : 1.0;
 }
 
-#dataDisplay tr > *:nth-child(1) {
-  opacity : 1.0
-}
 
 
 /* The Modal */

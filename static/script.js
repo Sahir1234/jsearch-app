@@ -1,5 +1,12 @@
 
+/* 
+ *
+ */
 sessionStorage.setItem('offset', '0');
+sessionStorage.setItem('favorites','[]');
+
+
+var fadeTime = 900;
 
 $(document).ready(function(){
 
@@ -105,10 +112,14 @@ $(document).ready(function(){
 
   $("button").click(function(){
 
-    $("#previousPage").hide();
-    $("#nextPage").hide();
+    if(this.id == "favorites"){
+      showFavorites();
+      return;
+    }
 
     if ($("#random").is(':checked')) {
+      $("#previousPage").hide();
+      $("#nextPage").hide();
       sessionStorage.setItem('offset', '0');
       getRandom(parseInt($( "#countSelect option:selected" ).val()));
       return;
@@ -126,12 +137,11 @@ $(document).ready(function(){
       offset += 100;
       args.offset = offset;
       sessionStorage.setItem('offset', offset);
-    } else {
+    } else if(this.id == "previousPage") {
       offset -= 100;
       args.offset = offset;
       sessionStorage.setItem('offset', offset);
     }
-
 
     getData(args);
     
@@ -167,22 +177,40 @@ var getArgs = function() {
 var getData = function(args) {
 
   $.ajax({
-    url: "http://localhost:8888/api-connector",
+    url: "http://localhost:5000/api-connector",
     type: 'GET',
     data: args,
     success: function(result) {
       if(result.length == 0) {
-        if(sessionStorage.get(offset) > 0) {
+
+        if(parseInt(sessionStorage.getItem('offset')) > 0) {
+
+          if(parseInt(sessionStorage.getItem('offset')) > 100) {
+            $("#previousPage").show();
+          }
+
+          $("#nextPage").show();
           alert("NO MORE RESULTS TO SHOW!");
+          offset = parseInt(sessionStorage.getItem('offset'));
+          offset -= 100;
+          sessionStorage.setItem('offset', offset);
+
         } else {
+
           alert("NO RESULTS FOR THIS SEARCH!");
+
         }
       } else {
+
+        $("#previousPage").hide();
+        $("#nextPage").hide();
         displayTable(result);
+
         if(parseInt(sessionStorage.getItem('offset')) > 0) {
-          $("#previousPage").show();      
+          $("#previousPage").fadeIn(fadeTime);      
         }
-        $("#nextPage").show();
+        
+        $("#nextPage").fadeIn(fadeTime);
       }
     }
   });
@@ -201,10 +229,51 @@ var getRandom = function(count) {
         count: count
       },
       success: function(result) {
+        sessionStorage.setItem('offset', '0');
         displayTable(result);
       }
     });
   
+}
+
+
+var addToFavorites = function(row) {
+
+  var favorites = JSON.parse(sessionStorage.getItem('favorites'));
+
+  var data = new Object();
+
+  data.airdate = row.children[0].innerHTML;
+
+  data.category = new Object();
+  data.category.title = row.children[1].innerHTML;
+
+  data.value = row.children[2].innerHTML;
+
+  data.question = row.children[3].innerHTML;
+
+  data.answer = row.children[4].innerHTML;
+
+  favorites.push(data);
+
+  sessionStorage.setItem('favorites', JSON.stringify(favorites));
+
+  alert("QUESTION SUCCESFULLY ADDED TO FAVORITES!");
+
+}
+
+
+var showFavorites = function() {
+
+  var favorites = JSON.parse(sessionStorage.getItem('favorites'));
+  if(favorites.length == 0) {
+    alert("NO SAVED QUESTIONS!")
+  } else {
+    $("#previousPage").hide();      
+    $("#nextPage").hide();
+    sessionStorage.setItem('offset', '0');
+    displayTable(favorites);
+  }
 }
 
 var displayTable = function(result) {
@@ -221,14 +290,13 @@ var displayTable = function(result) {
 
     var questionValue = (result[i].value == null) ? "Final Jeopardy" : result[i].value.toString();
 
-    var row = "<tr><td>"+result[i].airdate.substring(0,10)+"</td><td>"+result[i].category.title.toString()
-              +"</td><td>"+questionValue+"</td><td>"+result[i].question.toString()+"</td><td>"
-              +result[i].answer+"</td></tr>";
+    var row = '<tr onclick=addToFavorites(this)><td>'+result[i].airdate.substring(0,10)+'</td><td>'+result[i].category.title.toString()
+              +'</td><td>'+questionValue+'</td><td>'+result[i].question.toString()+'</td><td>'+result[i].answer+'</td></tr>';
 
     $('#dataDisplay').append(row).hide();
 
   }
 
-  $("#dataDisplay").fadeIn(1500);
+  $("#dataDisplay").fadeIn(fadeTime);
 
 }
