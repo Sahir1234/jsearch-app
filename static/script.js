@@ -5,7 +5,6 @@
 sessionStorage.setItem('offset', '0');
 sessionStorage.setItem('favorites','[]');
 
-
 var fadeTime = 900;
 
 $(document).ready(function(){
@@ -237,7 +236,7 @@ var getRandom = function(count) {
 }
 
 
-var addToFavorites = function(row) {
+var modifyFavorites = function(row) {
 
   var favorites = JSON.parse(sessionStorage.getItem('favorites'));
 
@@ -254,11 +253,28 @@ var addToFavorites = function(row) {
 
   data.answer = row.children[4].innerHTML;
 
+  for(var i = 0; i < favorites.length; i++) {
+
+    if(JSON.stringify(favorites[i]) == JSON.stringify(data)) {
+
+      var remove = confirm("REMOVE THIS QUESTION FROM FAVORITES?");
+
+      if(remove) {
+        favorites.splice(i, 1);
+        sessionStorage.setItem('favorites', JSON.stringify(favorites));
+        alert("QUESTION SUCCESSFULLY REMOVED!");
+      }
+      
+      return;
+
+    }
+
+  }
+
   favorites.push(data);
-
   sessionStorage.setItem('favorites', JSON.stringify(favorites));
-
   alert("QUESTION SUCCESFULLY ADDED TO FAVORITES!");
+
 
 }
 
@@ -290,7 +306,7 @@ var displayTable = function(result) {
 
     var questionValue = (result[i].value == null) ? "Final Jeopardy" : result[i].value.toString();
 
-    var row = '<tr onclick=addToFavorites(this)><td>'+result[i].airdate.substring(0,10)+'</td><td>'+result[i].category.title.toString()
+    var row = '<tr onclick=modifyFavorites(this)><td>'+result[i].airdate.substring(0,10)+'</td><td>'+result[i].category.title.toString()
               +'</td><td>'+questionValue+'</td><td>'+result[i].question.toString()+'</td><td>'+result[i].answer+'</td></tr>';
 
     $('#dataDisplay').append(row).hide();
