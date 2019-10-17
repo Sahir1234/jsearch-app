@@ -3,7 +3,10 @@
  *
  */
 sessionStorage.setItem('offset', '0');
-sessionStorage.setItem('favorites','[]');
+
+if(localStorage.getItem('favorites') == null) {
+  localStorage.setItem('favorites','[]');
+}
 
 var fadeTime = 900;
 
@@ -238,7 +241,7 @@ var getRandom = function(count) {
 
 var modifyFavorites = function(row) {
 
-  var favorites = JSON.parse(sessionStorage.getItem('favorites'));
+  var favorites = JSON.parse(localStorage.getItem('favorites'));
 
   var data = new Object();
 
@@ -261,7 +264,7 @@ var modifyFavorites = function(row) {
 
       if(remove) {
         favorites.splice(i, 1);
-        sessionStorage.setItem('favorites', JSON.stringify(favorites));
+        localStorage.setItem('favorites', JSON.stringify(favorites));
         alert("QUESTION SUCCESSFULLY REMOVED!");
       }
       
@@ -272,7 +275,7 @@ var modifyFavorites = function(row) {
   }
 
   favorites.push(data);
-  sessionStorage.setItem('favorites', JSON.stringify(favorites));
+  localStorage.setItem('favorites', JSON.stringify(favorites));
   alert("QUESTION SUCCESFULLY ADDED TO FAVORITES!");
 
 
@@ -281,7 +284,7 @@ var modifyFavorites = function(row) {
 
 var showFavorites = function() {
 
-  var favorites = JSON.parse(sessionStorage.getItem('favorites'));
+  var favorites = JSON.parse(localStorage.getItem('favorites'));
   if(favorites.length == 0) {
     alert("NO SAVED QUESTIONS!")
   } else {
