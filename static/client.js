@@ -1,16 +1,25 @@
 
-/* 
- *
- */
+/* Store the offset as session variable so that it can be
+   used when user requests to see next page of results */
 sessionStorage.setItem('offset', '0');
 
+/* If local 
+*/
 if(localStorage.getItem('favorites') == null) {
   localStorage.setItem('favorites','[]');
 }
 
-var fadeTime = 900;
+const fadeTime = 900;
 
 $(document).ready(function(){
+
+  // When the user clicks anywhere outside of the modal, close it
+  var instructions = document.getElementById("instructions");
+  window.onclick = function(event) {
+    if (event.target == instructions) {
+      instructions.style.display = "none";
+    } 
+   }
 
   $("#betweenFilterInfo").hide();
   $("#count").hide();

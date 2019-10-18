@@ -6,59 +6,65 @@
 	<meta name="description" content="Search Through Archived Jeopardy Questions!">
 	<meta name="author" content="Sahir Mody">
 
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script src={{ url_for('static', filename='script.js') }}></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	
+	<script src={{ url_for('static', filename='client.js') }}></script>
 	<link rel="shortcut icon" type="image/x-icon" href={{ url_for('static', filename='favicon.ico') }}>
 	<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='style.css') }}>
-
-	<script>
-		$( function() {
-    		var potentialCategories = {{ categories|tojson }};
-    		$( "#category" ).autocomplete({
-				source: function(request, response) {
-        			var results = $.ui.autocomplete.filter(potentialCategories, request.term);
-					response(results.slice(0, 30));
-    			}
-   	 		});
-  		});
-	</script>
 
 </head>
 
 <body>
 
 	<p>
+		<br>
 		What is ...
 	</p>
 
-	<h1>The J-Search Web App! </h1>
+	<h1>
+		The J-Search Web App!
+	</h1>
+
+	<p id="instructionButton" onclick="document.getElementById('instructions').style.display = 'block'">
+		Click here for more information!
+	</p>
+
+	<p id="prompt">
+		Or start searching below...
+	</p>
+
+	<br>
 
 	<form id="filterBox">
-		<h2>
-			Filters:
-		</h2>
-		
-		<span id="instructionButton" onclick="document.getElementById('instructions').style.display = 'block'">
-			?
-		</span>
 
-		Random Questions? <input type="checkbox" name="random" value="random" id="random">
+		<h2>
+			Search For Questions By:
+		</h2>
+
+		Get Random Questions? <input type="checkbox" name="random" value="random" id="random">
 		<br>
-		
 		<span id="count">
+			<br>
 			How Many? 
+			<br>
+			<br>
 			<select id="countSelect">
 				<option value=1 selected="selected">1</li> 
 					{%for i in range(2, 101)%} 
 						<option value={{ i }}>{{ i }}</li> 
 					{%endfor%}
 			</select>
+			<br>
+			<br>
 		</span>
 
 		<span id="filters">
+
 			<p>
 				Point Value (Difficulty):
 				<select id="values">
@@ -75,58 +81,69 @@
 			</p>
 		
 			<p>
-				Airdate By: <br>
+				Airdate: 
+				<br>
 				<label for="allFilter">All Time</label>
 				<input type="radio" name="airtime" id="allFilter" value="all" checked="checked">
 				<label for="betweenFilter">Between Two Dates</label>
 				<input type="radio" name="airtime" id="betweenFilter" value="between">
-		
+				<br>
 				<span id = "betweenFilterInfo">
-				Starting Date:
-				<span id="startYear">
-				Year: <select id="startYearSelect">
-					{%for i in range(1964, 2019)%} 
-						  <option value={{ i }}>{{ i }}</li> 
-					{%endfor%}
-					<option value=2019 selected="selected">2019</li> 
-					</select>
-				</span>
-				<span id="startMonth">
-				Month: <select id="startMonthSelect">
-						<option value=1 selected="selected">January</option>
-						<option value=2>February</option>
-						<option value=3>March</option>
-						<option value=4>April</option>
-						<option value=5>May</option>
-						<option value=6>June</option>
-						<option value=7>July</option>
-						<option value=8>August</option>
-						<option value=9>Septmber</option>
-						<option value=10>October</option>
-						<option value=11>November</option>
-						<option value=12>December</option>
-					</select>
-				</span>
-				<span id="startDate">
-				Date: <select id="startDateSelect">
-					<option value=1 selected="selected">1</option>
-					{%for i in range(2,32)%} 
-						  <option value={{ i }}>{{ i }}</li> 
-					{%endfor%}
-					</select>
-				</span>
-		
-				Ending Date:
-				<span id="endYear">
-					Year: <select id="endYearSelect">
-						{%for i in range(1964, 2019)%} 
-							  <option value={{ i }}>{{ i }}</li> 
-						{%endfor%}
-						<option value=2019 selected="selected">2019</li> 
+					<br>
+					Starting Date:
+					<br>
+					<span id="startYear">
+						Year: 
+						<select id="startYearSelect">
+							{%for i in range(1964, 2019)%} 
+					 			<option value={{ i }}>{{ i }}</li> 
+							{%endfor%}
+							<option value=2019 selected="selected">2019</li> 
+						</select>
+					</span>
+					<span id="startMonth">
+						Month: 
+						<select id="startMonthSelect">
+							<option value=1 selected="selected">January</option>
+							<option value=2>February</option>
+							<option value=3>March</option>
+							<option value=4>April</option>
+							<option value=5>May</option>
+							<option value=6>June</option>
+							<option value=7>July</option>
+							<option value=8>August</option>
+							<option value=9>Septmber</option>
+							<option value=10>October</option>
+							<option value=11>November</option>
+							<option value=12>December</option>
+						</select>
+					</span>
+
+					<span id="startDate">
+						Date: 
+						<select id="startDateSelect">
+							<option value=1 selected="selected">1</option>
+							{%for i in range(2,32)%} 
+								<option value={{ i }}>{{ i }}</li> 
+							{%endfor%}
+						</select>
+					</span>
+					<br>
+					<br>
+					Ending Date:
+					<br>
+					<span id="endYear">
+						Year: 
+						<select id="endYearSelect">
+							{%for i in range(1964, 2019)%} 
+								  <option value={{ i }}>{{ i }}</li> 
+							{%endfor%}
+							<option value=2019 selected="selected">2019</li> 
 						</select>
 					</span>
 					<span id="endMonth">
-					Month: <select id="endMonthSelect">
+						Month: 
+						<select id="endMonthSelect">
 							<option value=1 selected="selected">January</option>
 							<option value=2>February</option>
 							<option value=3>March</option>
@@ -142,27 +159,26 @@
 						</select>
 					</span>
 					<span id="endDate">
-					Date: <select id="endDateSelect">
-						<option value=1 selected="selected">1</option>
-						{%for i in range(2,32)%} 
-							  <option value={{ i }}>{{ i }}</li> 
-						{%endfor%}
+						Date: 
+						<select id="endDateSelect">
+							<option value=1 selected="selected">1</option>
+							{%for i in range(2,32)%} 
+								  <option value={{ i }}>{{ i }}</li> 
+							{%endfor%}
 						</select>
 					</span>
+					<br>
+					<br>
 				</span>
 			</p>
 		
 			<p>
-				<div>
-					Category:
-					<input id="category" type="text" name="category" placeholder="Category">
-				</div>
-			
+				Category:
+				<input id="category" type="text" name="category" placeholder="">
 			</p>
 		
-			</span>
+		</span>
 
-		<br>
 		<button type="button" name="search" id="search">SEARCH!</button>
 		<button type="button" name="favorites" id="favorites">SHOW FAVORITES!</button>
 		<br>
@@ -170,7 +186,9 @@
 	</form>
 	
 
+
 	<form id="instructions" class="modal" style="display: none">
+
 		<div class="modal-content">
 		
 			<h2>
@@ -179,9 +197,11 @@
 
 			<p>
 				This app is built around the jService API, which allows users to quickly query an archive of past Jeopardy questions.
-				You can use the filter bar to look for specific types of questions based on their value, airdate or category. You can even
-				get a random batch of 1 to 100 questions if you'd like. Please note that since the API sometimes returns incomplete data for
-				certain questions, these questions will not be displayed in the table in order to only provide complete question data.
+				You can use the filter box to look for specific types of questions based on their value, airdate or category. You can even
+				get a random batch of 1 to 100 questions if you'd like by checking the box next to the random question prompt. Otherwise,
+				you can make selections for specific filters to get any kinds of questions you'd like. Please note that since the API 
+				sometimes returns incomplete data for certain questions, these questions will not be displayed in the table in order to 
+				only provide complete question data.
 			</p>
 
 			<p>
@@ -201,11 +221,9 @@
 		</div>
 
 	</form>
-
 	
-
 	<br>
-	<table id="dataDisplay" style="cursor: pointer;">
+	<table id="dataDisplay">
 	</table>
 	<br>
 
@@ -213,14 +231,20 @@
 	<button type="button" name="nextPage" id="nextPage">Next Page</button>
 
 	<script>
-		// When the user clicks anywhere outside of the modal, close it
-		var instructions = document.getElementById("instructions");
-		window.onclick = function(event) {
-		if (event.target == instructions) {
-		  instructions.style.display = "none";
-		} 
-	  }
-	  </script>
+
+		// loads categories passed from Flask so they can be used for category autocomplete
+		$( function() {
+    		var potentialCategories = {{ categories|tojson }};
+    		$( "#category" ).autocomplete({
+				source: function(request, response) {
+					var results = $.ui.autocomplete.filter(potentialCategories, request.term);
+					// only show 30 suggestions to keep the app from getting too slow
+					response(results.slice(0, 30));
+    			}
+   	 		});
+		  });
+		
+	</script>
 
 </body>
 </html>
