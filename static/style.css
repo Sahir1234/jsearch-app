@@ -26,7 +26,7 @@ body {
   z-index: 1;
   width: 64px;
   height: 64px;
-  animation: hide 4s forwards;
+  animation: hide 6s forwards;
 }
 .lds-roller div {
   animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
@@ -131,7 +131,7 @@ p {
 #whatIs {
   opacity: 0;
   animation: fadeIn 1.5s forwards;
-  animation-delay: 4s;
+  animation-delay: 2s;
 }
 
 h1 {
@@ -141,7 +141,7 @@ h1 {
   color: white;
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
   animation: fadeIn 1.5s forwards;
-  animation-delay: 6.5s;
+  animation-delay: 8.5s;
 }
 
 h2 {
@@ -160,7 +160,7 @@ h2 {
   border: 2px solid black;
   background: #f1f1f1;
   animation: fadeIn 1s forwards;
-  animation-delay: 8.5s;
+  animation-delay: 10.5s;
 }
 
 #instructionButton:hover {
@@ -170,7 +170,7 @@ h2 {
 #prompt {
   opacity: 0;
   animation: fadeIn 1s forwards;
-  animation-delay: 9.5s;
+  animation-delay: 11.5s;
 }
 
 #filterBox {
@@ -185,7 +185,7 @@ h2 {
   margin-left: auto;
   margin-right:auto;
   animation: fadeIn 2s forwards;
-  animation-delay: 11s;
+  animation-delay: 13s;
 }
 
 button {
