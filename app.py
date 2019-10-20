@@ -19,7 +19,7 @@ def index():
 
 
 # route to get all the categories so that they can be used in the autocomplete
-@app.route('/get-categories')
+@app.route('/api/categories')
 def get_categories():
 
     # if the categories have not already been loaded, we load them here
@@ -60,7 +60,7 @@ def get_categories():
 
 # Connector to API to process search filters and properly format
 # API call based on user's search parameters
-@app.route('/api-connector')
+@app.route('/api/data')
 def get_data():
 
     url = URL + 'clues'
@@ -103,7 +103,7 @@ def get_data():
     return jsonify(data)
 
 # route for random data requests of a specific count
-@app.route('/get-random')
+@app.route('/api/random')
 def get_random():
     
     url = URL + 'random'

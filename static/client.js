@@ -22,7 +22,7 @@ if(localStorage.getItem('favorites') == null) {
 // get all the categories so that they can be used by the autocomplete
 $.ajax(
   {
-    url: URL.concat('get-categories'),
+    url: URL.concat('api/categories'),
     type: 'GET',
     success: function(result) {
 
@@ -176,7 +176,7 @@ function getArgs() {
 function getData(args) {
 
   $.ajax({
-    url: URL.concat('api-connector'),
+    url: URL.concat('api/data'),
     type: 'GET',
     data: args,
     success: function(result) {
@@ -248,7 +248,7 @@ function getRandom(count) {
 
   $.ajax(
     {
-      url: URL.concat('get-random'),
+      url: URL.concat('api/random'),
       type: 'GET',
       data: {
         count: count
