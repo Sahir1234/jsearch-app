@@ -45,7 +45,7 @@ $.ajax(
       console.log(xhr);
       console.log(status);
       console.log(error);
-      alert("SOMETHING WENT WRONG! CHECK THE CONSOLE!");
+      alert("UNABLE TO LOAD CATEGORIES FOR CATEGORY AUTOCOMPLETE! ENSURE THAT YOU ARE USING HTTPS TO ACCESS THIS APP!");
 
     }
   }
