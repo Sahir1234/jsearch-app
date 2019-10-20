@@ -20,7 +20,7 @@ figuring out how to store user data even after they close the app (for the favor
 questions feature). As a result, I looked into Web APIs and incorporated the `sessionStorage`
 and `localStorage` properties into my JavaScript code in order to store "stringified" JSON data
 representing the user's saved  questions. Finally, the app is deployed on Heroku at the 
-following URL: [INSERT HEROKU LINK HERE](https://www.google.com).
+following URL: [https://jsearch-app.herokuapp.com](https://jsearch-app.herokuapp.com).
 
 ## Purpose and Contributions
 

@@ -231,16 +231,16 @@
 	<script>
 
 		// loads categories passed from Flask so they can be used for category autocomplete
-		$( function() {
-    		var potentialCategories = {{ categories|tojson }};
-    		$( "#category" ).autocomplete({
-				source: function(request, response) {
-					var results = $.ui.autocomplete.filter(potentialCategories, request.term);
-					// only show 30 suggestions to keep the app from getting too slow
-					response(results.slice(0, 30));
-    			}
-   	 		});
-		  });
+		var potentialCategories = {{ categories|tojson }};
+    	$( "#category" ).autocomplete({
+			source: function(request, response) {
+				
+				var results = $.ui.autocomplete.filter(potentialCategories, request.term);
+
+				// only show 30 suggestions to keep the app from getting too slow
+				response(results.slice(0, 30));
+    		}
+   	 	});
 		
 	</script>
 
