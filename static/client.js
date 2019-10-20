@@ -1,4 +1,10 @@
 
+// animation time for table and button animations
+const fadeTime = 900;
+
+// base URL for HTTP requests for data to display
+const URL = 'https://jsearch-app.herokuapp.com/';
+
 /*
  * Store the offset as session variable so that it can be
  * used when user requests to see next page of results 
@@ -13,13 +19,10 @@ if(localStorage.getItem('favorites') == null) {
   localStorage.setItem('favorites','[]');
 }
 
-// animation time for table and button animations
-const fadeTime = 900;
-
 // get all the categories so that they can be used by the autocomplete
 $.ajax(
   {
-    url: 'https://jsearch-app.herokuapp.com/get-categories',
+    url: URL.concat('get-categories'),
     type: 'GET',
     success: function(result) {
 
@@ -173,7 +176,7 @@ function getArgs() {
 function getData(args) {
 
   $.ajax({
-    url: 'https://jsearch-app.herokuapp.com/api-connector',
+    url: URL.concat('api-connector'),
     type: 'GET',
     data: args,
     success: function(result) {
@@ -245,7 +248,7 @@ function getRandom(count) {
 
   $.ajax(
     {
-      url: 'https://jsearch-app.herokuapp.com/get-random',
+      url: URL.concat('get-random'),
       type: 'GET',
       data: {
         count: count
