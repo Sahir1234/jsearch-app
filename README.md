@@ -24,8 +24,7 @@ following URL: [https://jsearch-app.herokuapp.com](https://jsearch-app.herokuapp
 
 ## Purpose and Contributions
 
-This application was developed by Sahir Mody as part of the 2019 Capital One
-Software Engineering Summit Application. If you wish to contribute, please
+This application was developed by Sahir Mody. If you wish to contribute, please
 submit a pull request or contact sahir.mody@gmail.com for more information
 on how to contribute. Some new features I would like to add in future development
 that I did not have time to do for this challenge include adding a game feature 
