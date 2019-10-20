@@ -16,7 +16,39 @@ if(localStorage.getItem('favorites') == null) {
 // animation time for table and button animations
 const fadeTime = 900;
 
+// get all the categories so that they can be used by the autocomplete
+$.ajax(
+  {
+    url: 'http://localhost:5000/get-categories',
+    type: 'GET',
+    success: function(result) {
 
+      var potentialCategories = JSON.parse(result);
+
+      $( "#category" ).autocomplete({
+        source: function(request, response) {
+      
+          var results = $.ui.autocomplete.filter(potentialCategories, request.term);
+
+          // only show 30 suggestions to keep the app from getting too slow
+          response(results.slice(0, 30));
+    
+        }
+
+      });
+
+    },
+    error: function(xhr,status,error) {
+      
+      // log the errors and alerts that an error has occurred
+      console.log(xhr);
+      console.log(status);
+      console.log(error);
+      alert("SOMETHING WENT WRONG! CHECK THE CONSOLE!");
+
+    }
+  }
+);
 
 /*
  * When the user changes the month, this function adjusts the date as well since different months have different amounts of days
@@ -143,7 +175,7 @@ function getArgs() {
 function getData(args) {
 
   $.ajax({
-    url: 'https://jsearch-app.herokuapp.com/api-connector',
+    url: 'http://localhost:5000/api-connector',
     type: 'GET',
     data: args,
     success: function(result) {
@@ -215,7 +247,7 @@ function getRandom(count) {
 
   $.ajax(
     {
-      url: 'https://jsearch-app.herokuapp.com/api-connector',
+      url: 'http://localhost:5000/api-connector',
       type: 'GET',
       data: {
         random: "true",
@@ -372,39 +404,6 @@ function displayTable(result) {
 // of the various  filter elements
 $(document).ready(function(){
 
-  // get all the categories so that they can be used by the autocomplete
-  $.ajax(
-    {
-      url: 'https://jsearch-app.herokuapp.com/categories',
-      type: 'GET',
-      success: function(result) {
-
-        var potentialCategories = ('{{ categories }}');
-        $( "#category" ).autocomplete({
-		    source: function(request, response) {
-				
-		      var results = $.ui.autocomplete.filter(potentialCategories, request.term);
-
-			    // only show 30 suggestions to keep the app from getting too slow
-          response(results.slice(0, 30));
-      
-        }
-
-        });
-
-      },
-      error: function(xhr,status,error) {
-        
-        // log the errors and alerts that an error has occurred
-        console.log(xhr);
-        console.log(status);
-        console.log(error);
-        alert("SOMETHING WENT WRONG! CHECK THE CONSOLE!");
-
-      }
-    }
-  );
-
   // close the modal when user clicks outside of it
   var instructions = document.getElementById('instructions');
   window.onclick = function(event) {
@@ -413,15 +412,12 @@ $(document).ready(function(){
     } 
   }
 
-
-
   // hide the filters and buttons so that they only appear when the user requires
   // them to change filter/search parameters
   $('#betweenFilterInfo').hide();
   $('#count').hide();
   $('#previousPage').hide();
   $('#nextPage').hide();
-
 
   // Respond to a user selecting/unselecting the random question checkbox
   $("input[type=checkbox][name='random']").change(function() {

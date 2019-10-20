@@ -1,15 +1,15 @@
 # import necessary packages
-from flask import Flask, request, render_template, jsonify, redirect
+from flask import Flask, request, render_template, jsonify, redirect, session
 from datetime import datetime
 import requests
 import json
-
-
 
 app = Flask(__name__)
 
 # url for API calls used later
 URL = 'http://jservice.io/api/'
+
+CATEGORIES = {}
 
 
 # Main route to render the home page of the app
@@ -19,39 +19,43 @@ def index():
 
 
 # route to get all the categories so that they can be used in the autocomplete
-@app.route('/categories')
+@app.route('/get-categories')
 def get_categories():
 
-    categories = {}
-
-    url = URL + 'categories'
-
-    # count is 100 because that is the maximum number of categories
-    # that can be retrieved in one API call
-    params = {'count': 100, 'offset': 0}
+    # if the categories have not already been loaded, we load them here
+    if not CATEGORIES:
     
-    r = requests.get(url=url, params=params)
-    data = r.json()
+        url = URL + 'categories'
 
-    # keep getting batches of categories while the batches are nonempty
-    while(len(data) > 0):
-
-        for i in range(0,len(data)):
-
-            # if any of the category data is missing, ignore that result
-            if(data[i]["title"] == None or data[i]["id"] == None):
-                continue
-
-            # add the category data to the dictionary
-            categories[data[i]["title"]] = data[i]["id"]
-
-        # increment ofsfset by 100 to get the next batch of categories
-        params["offset"] += 100
-
+        # count is 100 because that is the maximum number of categories
+       # that can be retrieved in one API call
+        params = {'count': 100, 'offset': 0}
+    
         r = requests.get(url=url, params=params)
         data = r.json()
 
-    return json.dumps(list(categories.keys()))
+        # keep getting batches of categories while the batches are nonempty
+        while(len(data) > 0):
+
+            for i in range(0,len(data)):
+
+                title = data[i]["title"]
+                id_num = data[i]["id"]
+
+                # if any of the category data is missing, ignore that result
+                if(title == None or id_num == None):
+                    continue
+
+                # add the category data to the dictionary
+                CATEGORIES[title] = id_num
+
+            # increment ofsfset by 100 to get the next batch of categories
+            params["offset"] += 100
+
+            r = requests.get(url=url, params=params)
+            data = r.json()
+
+    return json.dumps(list(CATEGORIES.keys()))
 
 
 # Connector to API to process search filters and properly format
@@ -85,7 +89,7 @@ def get_data():
 
     # add category ID as category parameter if the user entered a valid category or
     # add -1 as category ID parameter if the user entered an invalid category
-    # (so that the query does not return any results) 
+    # (so that the query does not return any results)
     if category in CATEGORIES.keys():
         params["category"] = CATEGORIES[category]
     elif category:
@@ -118,5 +122,5 @@ def page_not_found(e):
 
 
 if(__name__ == '__main__'):
-    get_categories()
+    app.secret_key = "SHHHH IT'S A SECRET"
     app.run()
