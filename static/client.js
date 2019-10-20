@@ -140,7 +140,7 @@ function getArgs() {
 function getData(args) {
 
   $.ajax({
-    url: 'http://localhost:5000/api-connector',
+    url: 'https://jsearch1.herokuapp.com/api-connector',
     type: 'GET',
     data: args,
     success: function(result) {
