@@ -11,15 +11,18 @@ app = Flask(__name__)
 # url for API calls used later
 URL = 'http://jservice.io/api/'
 
-# dictionary to map all category IDs to category names
-CATEGORIES = {}
+
+# Main route to render the home page of the app
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
-
-# This function collects all of the categories from the jService
-# API and stores them in the categories dictionary (so they can
-# be used for autocomplete and category search) 
+# route to get all the categories so that they can be used in the autocomplete
+@app.route('/categories')
 def get_categories():
+
+    categories = {}
 
     url = URL + 'categories'
 
@@ -40,7 +43,7 @@ def get_categories():
                 continue
 
             # add the category data to the dictionary
-            CATEGORIES[data[i]["title"]] = data[i]["id"]
+            categories[data[i]["title"]] = data[i]["id"]
 
         # increment ofsfset by 100 to get the next batch of categories
         params["offset"] += 100
@@ -48,13 +51,7 @@ def get_categories():
         r = requests.get(url=url, params=params)
         data = r.json()
 
-
-
-# Main route to render the home page of the app
-@app.route('/')
-def index():
-    return render_template('index.html', categories=list(CATEGORIES.keys()))
-
+    return json.dumps(list(categories.keys()))
 
 
 # Connector to API to process search filters and properly format

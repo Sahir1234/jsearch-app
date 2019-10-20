@@ -346,7 +346,8 @@ function displayTable(result) {
   for (var i = 0; i < result.length; i++) {
 
     // if the data has incomplete information, we ignore it can keep iterating through results
-    if (result[i].question.length == 0 || result[i].category.title == undefined) {
+    if (result[i].question == undefined || result[i].question.length == 0 || 
+        result[i].category == undefined || result[i].category.title == undefined) {
       continue;
     }
 
@@ -371,6 +372,38 @@ function displayTable(result) {
 // of the various  filter elements
 $(document).ready(function(){
 
+  // get all the categories so that they can be used by the autocomplete
+  $.ajax(
+    {
+      url: 'https://jsearch-app.herokuapp.com/categories',
+      type: 'GET',
+      success: function(result) {
+
+        var potentialCategories = ('{{ categories }}');
+        $( "#category" ).autocomplete({
+		    source: function(request, response) {
+				
+		      var results = $.ui.autocomplete.filter(potentialCategories, request.term);
+
+			    // only show 30 suggestions to keep the app from getting too slow
+          response(results.slice(0, 30));
+      
+        }
+
+        });
+
+      },
+      error: function(xhr,status,error) {
+        
+        // log the errors and alerts that an error has occurred
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+        alert("SOMETHING WENT WRONG! CHECK THE CONSOLE!");
+
+      }
+    }
+  );
 
   // close the modal when user clicks outside of it
   var instructions = document.getElementById('instructions');
@@ -379,6 +412,7 @@ $(document).ready(function(){
       instructions.style.display = 'none';
     } 
   }
+
 
 
   // hide the filters and buttons so that they only appear when the user requires

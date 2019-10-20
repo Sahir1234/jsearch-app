@@ -30,7 +30,7 @@ h1 {
   color: white;
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
   animation: fadeIn 1s forwards;
-  animation-delay: 0.5s;
+  animation-delay: 1s;
 }
 
 h2 {
@@ -49,7 +49,7 @@ h2 {
   border: 2px solid black;
   background: #f1f1f1;
   animation: fadeIn 1s forwards;
-  animation-delay: 1.7s;
+  animation-delay: 2.7s;
 }
 
 #instructionButton:hover {
@@ -59,7 +59,7 @@ h2 {
 #prompt {
   opacity: 0;
   animation: fadeIn 1s forwards;
-  animation-delay: 2.7s;
+  animation-delay: 3.7s;
 }
 
 #filterBox {
@@ -73,8 +73,8 @@ h2 {
   background-color: green;
   margin-left: auto;
   margin-right:auto;
-  animation: fadeIn 1s forwards;
-  animation-delay: 3.7s;
+  animation: fadeIn 2s forwards;
+  animation-delay: 5s;
 }
 
 button {
