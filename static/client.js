@@ -19,7 +19,7 @@ const fadeTime = 900;
 // get all the categories so that they can be used by the autocomplete
 $.ajax(
   {
-    url: 'http://localhost:5000/get-categories',
+    url: 'https://jsearch-app.herokuapp.com/get-categories',
     type: 'GET',
     success: function(result) {
 
@@ -28,6 +28,7 @@ $.ajax(
       $( "#category" ).autocomplete({
         source: function(request, response) {
       
+          // adjust the autocomplete suggestions every time user types
           var results = $.ui.autocomplete.filter(potentialCategories, request.term);
 
           // only show 30 suggestions to keep the app from getting too slow
@@ -136,9 +137,6 @@ function getArgs() {
 
   var args = new Object();
 
-  // indicator that the search is not a random search
-  args.random = "false"
-
   // read the point value field and store the integer value
   args.value = parseInt($( '#values option:selected' ).val());
     
@@ -175,7 +173,7 @@ function getArgs() {
 function getData(args) {
 
   $.ajax({
-    url: 'http://localhost:5000/api-connector',
+    url: 'https://jsearch-app.herokuapp.com/api-connector',
     type: 'GET',
     data: args,
     success: function(result) {
@@ -247,10 +245,9 @@ function getRandom(count) {
 
   $.ajax(
     {
-      url: 'http://localhost:5000/api-connector',
+      url: 'https://jsearch-app.herokuapp.com/get-random',
       type: 'GET',
       data: {
-        random: "true",
         count: count
       },
       success: function(result) {

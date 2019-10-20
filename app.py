@@ -1,5 +1,5 @@
 # import necessary packages
-from flask import Flask, request, render_template, jsonify, redirect, session
+from flask import Flask, request, render_template, jsonify, redirect
 from datetime import datetime
 import requests
 import json
@@ -9,8 +9,8 @@ app = Flask(__name__)
 # url for API calls used later
 URL = 'http://jservice.io/api/'
 
+# stores categories and maps to their id number
 CATEGORIES = {}
-
 
 # Main route to render the home page of the app
 @app.route('/')
@@ -63,17 +63,6 @@ def get_categories():
 @app.route('/api-connector')
 def get_data():
 
-    # if the search was for random questions, we don't need to look at the other arguments
-    if (request.args["random"] == "true"):
-
-        url = URL + 'random'
-        params = {'count' : int(request.args["count"])}
-
-        r = requests.get(url=url, params=params)
-        data = r.json()
-
-        return jsonify(data)
-
     url = URL + 'clues'
 
     params = {}
@@ -113,8 +102,22 @@ def get_data():
 
     return jsonify(data)
 
+# route for random data requests of a specific count
+@app.route('/get-random')
+def get_random():
+    
+    url = URL + 'random'
+
+    params = {'count' : int(request.args["count"])}
+
+    r = requests.get(url=url, params=params)
+    data = r.json()
+
+    return jsonify(data)
+
+
 # Handler for errors whenever user goes to an invalid route that
-# redirects them back to 
+# redirects them back to the main page
 @app.errorhandler(404)
 @app.errorhandler(400)
 def page_not_found(e):
@@ -122,5 +125,4 @@ def page_not_found(e):
 
 
 if(__name__ == '__main__'):
-    app.secret_key = "SHHHH IT'S A SECRET"
     app.run()
