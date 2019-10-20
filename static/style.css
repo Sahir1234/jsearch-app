@@ -131,7 +131,7 @@ p {
 #whatIs {
   opacity: 0;
   animation: fadeIn 1.5s forwards;
-  animation-delay: 2s;
+  animation-delay: 6s;
 }
 
 h1 {
