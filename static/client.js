@@ -104,6 +104,9 @@ function getArgs() {
 
   var args = new Object();
 
+  // indicator that the search is not a random search
+  args.random = "false"
+
   // read the point value field and store the integer value
   args.value = parseInt($( '#values option:selected' ).val());
     
@@ -212,9 +215,10 @@ function getRandom(count) {
 
   $.ajax(
     {
-      url: 'http://jservice.io/api/random',
+      url: 'https://jsearch-app.herokuapp.com/api-connector',
       type: 'GET',
       data: {
+        random: "true",
         count: count
       },
       success: function(result) {

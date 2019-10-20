@@ -62,6 +62,17 @@ def index():
 @app.route('/api-connector')
 def get_data():
 
+    # if the search was for random questions, we don't need to look at the other arguments
+    if (request.args["random"] == "true"):
+
+        url = URL + 'random'
+        params = {'count' : int(request.args["count"])}
+
+        r = requests.get(url=url, params=params)
+        data = r.json()
+
+        return jsonify(data)
+
     url = URL + 'clues'
 
     params = {}
