@@ -160,7 +160,7 @@ h2 {
   border: 2px solid black;
   background: #f1f1f1;
   animation: fadeIn 1s forwards;
-  animation-delay: 10.5s;
+  animation-delay: 11s;
 }
 
 #instructionButton:hover {
@@ -170,7 +170,7 @@ h2 {
 #prompt {
   opacity: 0;
   animation: fadeIn 1s forwards;
-  animation-delay: 11.5s;
+  animation-delay: 12s;
 }
 
 #filterBox {
@@ -185,7 +185,7 @@ h2 {
   margin-left: auto;
   margin-right:auto;
   animation: fadeIn 2s forwards;
-  animation-delay: 13s;
+  animation-delay: 13.5s;
 }
 
 button {
