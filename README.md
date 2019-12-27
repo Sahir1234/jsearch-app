@@ -22,7 +22,7 @@ and `localStorage` properties into my JavaScript code in order to store "stringi
 representing the user's saved  questions. Finally, the app is deployed on Heroku at the 
 following URL: [https://jsearch-app.herokuapp.com](https://jsearch-app.herokuapp.com).
 
-## Purpose and Contributions
+## Author and Contributions
 
 This application was developed by Sahir Mody. If you wish to contribute, please
 submit a pull request or contact sahir.mody@gmail.com for more information
